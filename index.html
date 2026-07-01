@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>只给王芷怡开的商店</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #332724;
+      --muted: #7a6861;
+      --line: #ead9d2;
+      --paper: #fff8f5;
+      --soft: #f8e7df;
+      --rose: #e85b7a;
+      --rose-dark: #b93a5b;
+      --peach: #ffb37d;
+      --mint: #78b9a8;
+      --lavender: #8c74c9;
+      --gold: #f3b84b;
+      --shadow: 0 18px 44px rgba(117, 68, 78, .16);
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(255, 179, 125, .36), transparent 25%),
+        radial-gradient(circle at 92% 18%, rgba(232, 91, 122, .22), transparent 24%),
+        linear-gradient(135deg, #fff8f5 0%, #fff0e7 44%, #f4efff 100%);
+      color: var(--ink);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      min-width: 0;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-title {
+      overflow-wrap: anywhere;
+      line-height: 1.25;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 9px 20px rgba(51, 39, 36, .18);
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-weight: 700;
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    .cart-button {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .72);
+      color: var(--ink);
+      border-radius: 999px;
+      min-height: 42px;
+      padding: 0 14px;
+      cursor: pointer;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .hero {
+      min-height: 560px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.06fr .94fr;
+      background: rgba(255, 255, 255, .62);
+      margin-bottom: 18px;
+    }
+
+    .hero-copy {
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(232, 91, 122, .22);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .7);
+      padding: 8px 12px;
+      color: var(--rose-dark);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    h1 {
+      margin: 18px 0 0;
+      font-size: clamp(42px, 8vw, 84px);
+      line-height: .94;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 620px;
+      margin: 18px 0 0;
+      color: #5a4640;
+      font-size: 18px;
+      line-height: 1.75;
+      font-weight: 700;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      min-height: 44px;
+      padding: 11px 15px;
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: var(--rose);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(232, 91, 122, .24);
+    }
+
+    .btn-primary:hover {
+      background: var(--rose-dark);
+    }
+
+    .btn-plain {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .promise {
+      display: grid;
+      gap: 10px;
+      max-width: 620px;
+    }
+
+    .promise-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid rgba(234, 217, 210, .9);
+      background: rgba(255, 255, 255, .68);
+      border-radius: 8px;
+      padding: 11px 12px;
+      color: #594740;
+      line-height: 1.55;
+      font-weight: 700;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 420px;
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, .2), transparent 42%),
+        radial-gradient(circle at 70% 16%, rgba(255, 255, 255, .54), transparent 20%),
+        linear-gradient(150deg, #f8c0c8 0%, #ffd7ab 44%, #bfaef5 100%);
+      display: grid;
+      place-items: center;
+      padding: 26px;
+    }
+
+    .gift-scene {
+      width: min(360px, 92%);
+      aspect-ratio: 1;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.8), transparent 12%),
+        linear-gradient(145deg, rgba(255,255,255,.38), rgba(255,255,255,.1));
+      border: 1px solid rgba(255, 255, 255, .54);
+      display: grid;
+      place-items: center;
+      position: relative;
+      box-shadow: 0 22px 52px rgba(103, 63, 82, .2);
+    }
+
+    .gift-box {
+      width: 178px;
+      height: 148px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--rose), #ff7b9c);
+      position: relative;
+      box-shadow: 0 20px 34px rgba(139, 45, 70, .28);
+    }
+
+    .gift-box::before {
+      content: "";
+      position: absolute;
+      inset: 0 70px;
+      background: #ffe0a6;
+    }
+
+    .gift-box::after {
+      content: "";
+      position: absolute;
+      left: -12px;
+      right: -12px;
+      top: 34px;
+      height: 28px;
+      background: #ffe0a6;
+      border-radius: 6px;
+    }
+
+    .ribbon {
+      position: absolute;
+      top: -44px;
+      left: 50%;
+      width: 120px;
+      height: 62px;
+      transform: translateX(-50%);
+    }
+
+    .ribbon::before,
+    .ribbon::after {
+      content: "";
+      position: absolute;
+      width: 58px;
+      height: 44px;
+      border: 13px solid #ffe0a6;
+      border-radius: 50%;
+      top: 8px;
+    }
+
+    .ribbon::before {
+      right: 50%;
+      transform: rotate(-28deg);
+    }
+
+    .ribbon::after {
+      left: 50%;
+      transform: rotate(28deg);
+    }
+
+    .floating-note {
+      position: absolute;
+      background: rgba(255, 255, 255, .82);
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #654b48;
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(80, 40, 55, .12);
+    }
+
+    .note-a {
+      left: 22px;
+      top: 34px;
+      transform: rotate(-6deg);
+    }
+
+    .note-b {
+      right: 22px;
+      bottom: 44px;
+      transform: rotate(5deg);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin: 24px 0 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, .78);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 9px 24px rgba(117, 68, 78, .09);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .product-art {
+      min-height: 146px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 62px;
+      font-weight: 900;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,.24), transparent 42%, rgba(0,0,0,.1));
+    }
+
+    .product-body {
+      padding: 15px;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .product-body h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .product-body p {
+      margin: 0;
+      min-height: 48px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 700;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .price {
+      color: var(--rose-dark);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .drawer {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: min(430px, calc(100vw - 36px));
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+      background: #fffdfb;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 22px 72px rgba(51, 39, 36, .28);
+      padding: 18px;
+      z-index: 20;
+      display: none;
+    }
+
+    .drawer.show {
+      display: block;
+    }
+
+    .drawer-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .drawer-head h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--ink);
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1e5df;
+    }
+
+    .cart-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 8px;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .cart-item strong {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .cart-item span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qty button {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .field {
+      margin: 14px 0;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 900;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 12px;
+      background: #fff9f6;
+      color: var(--ink);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(48, 35, 36, .54);
+      z-index: 50;
+      padding: 18px;
+    }
+
+    .modal.show {
+      display: grid;
+    }
+
+    .modal-panel {
+      width: min(780px, 100%);
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+      background: #fff9f6;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 24px 90px rgba(48, 35, 36, .32);
+      padding: 20px;
+    }
+
+    .ticket {
+      background:
+        radial-gradient(circle at 12px 50%, transparent 11px, #fff 12px) left center/24px 36px repeat-y,
+        radial-gradient(circle at calc(100% - 12px) 50%, transparent 11px, #fff 12px) right center/24px 36px repeat-y,
+        linear-gradient(135deg, #fff 0%, #fff4ef 100%);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+    }
+
+    .ticket h2 {
+      margin: 0;
+      font-size: clamp(30px, 7vw, 58px);
+      line-height: 1;
+    }
+
+    .ticket-list {
+      margin: 18px 0;
+      display: grid;
+      gap: 10px;
+      line-height: 1.6;
+      font-weight: 900;
+    }
+
+    .checkout-line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+      border-bottom: 1px solid #f0e3dc;
+      padding: 10px 0;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .summary-total {
+      color: var(--rose-dark);
+      font-size: 20px;
+    }
+
+    .stamp {
+      display: inline-flex;
+      width: fit-content;
+      border: 2px solid var(--rose);
+      color: var(--rose-dark);
+      transform: rotate(-4deg);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 900;
+      margin-top: 10px;
+    }
+
+    .letter {
+      margin-top: 16px;
+      border: 1px solid #ead9d2;
+      background: rgba(255, 255, 255, .76);
+      border-radius: 8px;
+      padding: 16px;
+      line-height: 1.85;
+      color: #5d4943;
+      font-weight: 700;
+    }
+
+    .footer {
+      margin-top: 28px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 880px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 360px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        width: min(100% - 20px, 1120px);
+        padding-top: 12px;
+      }
+
+      .topbar {
+        gap: 8px;
+      }
+
+      .brand {
+        gap: 8px;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+      }
+
+      .brand-title {
+        font-size: 14px;
+      }
+
+      .brand small {
+        font-size: 12px;
+      }
+
+      .cart-button {
+        min-height: 36px;
+        padding: 0 10px;
+        font-size: 13px;
+      }
+
+      .hero-copy {
+        padding: 22px;
+      }
+
+      .lead {
+        font-size: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .floating-note {
+        font-size: 13px;
+      }
+
+      .drawer {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        width: auto;
+        max-height: calc(100vh - 20px);
+        padding: 14px;
+      }
+
+      .modal {
+        padding: 10px;
+      }
+
+      .modal-panel {
+        max-height: calc(100vh - 20px);
+        padding: 14px;
+      }
+
+      .ticket {
+        padding: 18px 16px;
+      }
+
+      .checkout-line {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .summary-row {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">怡</div>
+        <div class="brand-text">
+          <div class="brand-title">只给王芷怡开的商店</div>
+          <small>店主：韩子越</small>
+        </div>
+      </div>
+      <button class="cart-button" id="cartToggle">礼物篮 <span id="cartCount">0</span></button>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div>
+          <span class="eyebrow">仅王芷怡可进入</span>
+          <h1>欢迎光临，只给你开的商店。</h1>
+          <p class="lead">这里所有东西都不用钱，只需要王芷怡开心一点。每一份虚拟礼物，都是韩子越认真存下来的偏爱。</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="starterBtn">帮我配一份开心套餐</button>
+            <button class="btn btn-plain" id="letterBtn">先看店主留言</button>
+          </div>
+        </div>
+        <div class="promise">
+          <div class="promise-item"><strong>01</strong><span>本店主不讲道理，只站在上帝王芷怡这边。</span></div>
+          <div class="promise-item"><strong>02</strong><span>不开心可以随时售后，店主竭诚为您服务。</span></div>
+          <div class="promise-item"><strong>03</strong><span>店主的梦想是让王芷怡成为老板娘。</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="floating-note note-a">6.30</div>
+        <div class="gift-scene">
+          <div class="gift-box"><div class="ribbon"></div></div>
+        </div>
+        <div class="floating-note note-b">一周年快乐</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>今日可领取</h2>
+          <p>挑几样放进礼物篮，最后会生成一张只属于你们的恋爱小票。</p>
+        </div>
+        <button class="btn btn-plain" id="clearBtn">清空重选</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <aside class="drawer" id="drawer" aria-label="礼物篮">
+    <div class="drawer-head">
+      <h2>王芷怡的礼物篮</h2>
+      <button class="icon-btn" id="closeDrawer" aria-label="关闭">×</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="field">
+      <label for="mood">今天想兑换什么服务</label>
+      <input id="mood" maxlength="18" placeholder="例如：抱抱我、陪我散步、夸我可爱">
+    </div>
+    <button class="btn btn-primary" id="checkoutBtn" style="width:100%;">0 元结算</button>
+  </aside>
+
+  <section class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-panel">
+      <div class="drawer-head">
+        <h2 id="modalTitle">恋爱小票</h2>
+        <button class="icon-btn" id="closeModal" aria-label="关闭">×</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    本店长期营业，唯一顾客：王芷怡。最终解释权归韩子越所有，但王芷怡可以随时推翻。
+  </footer>
+
+  <script>
+    const gifts = [
+      { id: 1, icon: "抱", name: "今日抱抱券", desc: "不问原因，先抱三十秒，再慢慢听你说。", note: "一个靠近", color: "#e85b7a" },
+      { id: 2, icon: "亲", name: "亲亲补给包", desc: "适合开心、委屈、撒娇和突然想被偏爱的时刻。", note: "一个眨眼", color: "#ff8aa3" },
+      { id: 3, icon: "做", name: "想和你做的爱", desc: "想和你做很多很多爱，想做就做，做个痛快。", note: "只对你有效", color: "#78b9a8" },
+      { id: 4, icon: "陪", name: "陪你散步套餐", desc: "路线你定，茉酸奶我买，话可以慢慢讲。", note: "牵手一次", color: "#8c74c9" },
+      { id: 5, icon: "偏", name: "终身偏爱会员", desc: "不用排队，不用预约，在韩子越这里永远优先。", note: "永久有效", color: "#f3b84b" },
+      { id: 6, icon: "夸", name: "专属夸夸机", desc: "王芷怡今天也很好看，很可爱，很值得被喜欢。", note: "笑一下", color: "#e66f4f" },
+      { id: 7, icon: "饭", name: "一起吃饭预约券", desc: "想吃什么都可以，重点不是吃什么，是和你一起。", note: "选个时间", color: "#d7864a" },
+      { id: 8, icon: "走", name: "随叫随走旅行券", desc: "你说想走，店主就开始查路线，目的地听你的。", note: "韩子越买单", color: "#5d8fc5" },
+      { id: 9, icon: "想", name: "自动想你提醒", desc: "不用设置闹钟，因为店主本来就会经常想你。", note: "每天生效", color: "#b46ad7" }
+    ];
+
+    const cart = new Map();
+    const grid = document.querySelector("#grid");
+    const drawer = document.querySelector("#drawer");
+    const cartItems = document.querySelector("#cartItems");
+    const cartCount = document.querySelector("#cartCount");
+    const modal = document.querySelector("#modal");
+    const modalTitle = document.querySelector("#modalTitle");
+    const modalBody = document.querySelector("#modalBody");
+
+    function renderGifts() {
+      grid.innerHTML = gifts.map(gift => `
+        <article class="card">
+          <div class="product-art" style="background: linear-gradient(135deg, ${gift.color}, #ffd7ab);">${gift.icon}</div>
+          <div class="product-body">
+            <h3>${gift.name}</h3>
+            <p>${gift.desc}</p>
+            <div class="meta">
+              <div>
+                <div class="price">¥0.00</div>
+                <small>王芷怡专属</small>
+              </div>
+              <button class="btn btn-primary" data-add="${gift.id}">加入</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function getCartList() {
+      return Array.from(cart.entries()).map(([id, qty]) => ({
+        ...gifts.find(gift => gift.id === Number(id)),
+        qty
+      }));
+    }
+
+    function updateCount() {
+      cartCount.textContent = getCartList().reduce((sum, item) => sum + item.qty, 0);
+    }
+
+    function renderCart() {
+      const list = getCartList();
+      if (!list.length) {
+        cartItems.innerHTML = `<p style="color: var(--muted); line-height: 1.7;">礼物篮还是空的。先给王芷怡挑一点开心。</p>`;
+        updateCount();
+        return;
+      }
+
+      cartItems.innerHTML = list.map(item => `
+        <div class="cart-item">
+          <div class="cart-icon" style="background:${item.color}">${item.icon}</div>
+          <div>
+            <strong>${item.name}</strong>
+            <span>单价 ¥0.00 · ${item.note}</span>
+          </div>
+          <div class="qty">
+            <button data-dec="${item.id}">-</button>
+            <strong>${item.qty}</strong>
+            <button data-inc="${item.id}">+</button>
+          </div>
+        </div>
+      `).join("");
+      updateCount();
+    }
+
+    function addGift(id) {
+      cart.set(Number(id), (cart.get(Number(id)) || 0) + 1);
+      renderCart();
+      drawer.classList.add("show");
+    }
+
+    function changeQty(id, delta) {
+      const next = (cart.get(Number(id)) || 0) + delta;
+      if (next <= 0) cart.delete(Number(id));
+      else cart.set(Number(id), next);
+      renderCart();
+    }
+
+    function chooseStarter() {
+      cart.clear();
+      [1, 3, 5, 6].forEach(id => cart.set(id, 1));
+      renderCart();
+      drawer.classList.add("show");
+    }
+
+    function showLetter() {
+      modalTitle.textContent = "店主留言";
+      modalBody.innerHTML = `
+        <div class="letter">
+          <p>王芷怡：</p>
+          <p>这个小店不是为了卖东西，是想告诉你：在韩子越这里，你不用一直懂事，也不用把所有情绪都讲得很清楚。</p>
+          <p>你可以开心一点，也可以不开心；可以撒娇，也可以沉默。反正我都会认真接住你。</p>
+          <p>所以今天先从这里挑一份礼物吧。虽然是虚拟的，但偏爱是真的。</p>
+          <p style="text-align:right;">韩子越</p>
+        </div>
+      `;
+      modal.classList.add("show");
+    }
+
+    function checkout() {
+      if (!getCartList().length) chooseStarter();
+      const mood = document.querySelector("#mood").value.trim() || "开心一点";
+      const list = getCartList();
+      const orderId = "LOVE-" + Math.random().toString(16).slice(2, 7).toUpperCase();
+      const rows = list.map(item => `
+        <div class="checkout-line">
+          <div>${item.name} × ${item.qty}<br><small>${item.desc}</small></div>
+          <strong>¥0.00</strong>
+        </div>
+      `).join("");
+      modalTitle.textContent = "恋爱小票已生成";
+      modalBody.innerHTML = `
+        <div class="ticket">
+          <p style="margin:0 0 10px; color:var(--rose-dark); font-weight:900;">只给王芷怡开的商店</p>
+          <h2>王芷怡的<br>专属订单</h2>
+          <div class="ticket-list">${rows}</div>
+          <div style="display:grid; gap:8px; border-top:2px solid #ead9d2; border-bottom:2px solid #ead9d2; padding:12px 0; margin:12px 0; color:#4f3d38; font-weight:900;">
+            <div class="summary-row"><span>商品总额</span><span>¥0.00</span></div>
+            <div class="summary-row"><span>店主偏爱折扣</span><span>-¥0.00</span></div>
+            <div class="summary-row"><span>配送费</span><span>韩子越承担</span></div>
+            <div class="summary-row summary-total"><span>实付</span><span>¥0.00</span></div>
+          </div>
+          <div style="display:grid; gap:8px; color:#5e4a43; font-weight:800; line-height:1.7;">
+            <div>订单编号：${orderId}</div>
+            <div>收货愿望：${mood}</div>
+            <div>配送员：韩子越</div>
+            <div>预计送达：你需要我的任何时候</div>
+            <div>支付方式：王芷怡专属免单权益</div>
+          </div>
+        </div>
+        <div class="letter">
+          这张小票不用保存也不会失效。王芷怡什么时候想兑换，韩子越都认账。
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;">
+          <button class="btn btn-primary" id="moreGift">继续挑礼物</button>
+          <button class="btn btn-plain" id="closeTicket">关闭小票</button>
+        </div>
+      `;
+      modal.classList.add("show");
+      document.querySelector("#moreGift").addEventListener("click", () => {
+        modal.classList.remove("show");
+        drawer.classList.add("show");
+      });
+      document.querySelector("#closeTicket").addEventListener("click", () => {
+        modal.classList.remove("show");
+      });
+    }
+
+    grid.addEventListener("click", event => {
+      const button = event.target.closest("[data-add]");
+      if (button) addGift(button.dataset.add);
+    });
+
+    cartItems.addEventListener("click", event => {
+      const inc = event.target.closest("[data-inc]");
+      const dec = event.target.closest("[data-dec]");
+      if (inc) changeQty(inc.dataset.inc, 1);
+      if (dec) changeQty(dec.dataset.dec, -1);
+    });
+
+    document.querySelector("#cartToggle").addEventListener("click", () => drawer.classList.toggle("show"));
+    document.querySelector("#closeDrawer").addEventListener("click", () => drawer.classList.remove("show"));
+    document.querySelector("#checkoutBtn").addEventListener("click", checkout);
+    document.querySelector("#starterBtn").addEventListener("click", chooseStarter);
+    document.querySelector("#letterBtn").addEventListener("click", showLetter);
+    document.querySelector("#closeModal").addEventListener("click", () => modal.classList.remove("show"));
+    document.querySelector("#clearBtn").addEventListener("click", () => {
+      cart.clear();
+      renderCart();
+    });
+
+    renderGifts();
+    renderCart();
+  </script>
+</body>
+</html>
