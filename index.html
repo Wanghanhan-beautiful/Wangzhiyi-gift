@@ -628,20 +628,6 @@
       font-weight: 700;
     }
 
-    .video-frame {
-      width: 100%;
-      border-radius: 8px;
-      background: #1f1718;
-      overflow: hidden;
-    }
-
-    .video-frame video {
-      width: 100%;
-      max-height: min(68vh, 720px);
-      display: block;
-      background: #1f1718;
-    }
-
     .footer {
       margin-top: 28px;
       color: var(--muted);
@@ -785,7 +771,7 @@
 
       <div class="hero-visual">
         <div class="floating-note note-a">6.30</div>
-        <button class="gift-scene" id="giftVideoBtn" aria-label="打开一周年快乐视频">
+        <button class="gift-scene" id="giftLetterBtn" aria-label="打开一周年隐藏信">
           <div class="gift-box"><div class="ribbon"></div></div>
         </button>
         <div class="floating-note note-b">一周年快乐</div>
@@ -944,23 +930,23 @@
       modal.classList.add("show");
     }
 
-    function closeModal() {
-      const video = modalBody.querySelector("video");
-      if (video) video.pause();
-      modal.classList.remove("show");
-    }
-
-    function showVideo() {
-      modalTitle.textContent = "一周年快乐";
+    function showGiftLetter() {
+      modalTitle.textContent = "给王芷怡的一周年礼物";
       modalBody.innerHTML = `
-        <div class="video-frame">
-          <video controls autoplay playsinline preload="metadata" src="assets/anniversary.mp4"></video>
-        </div>
         <div class="letter">
-          这份礼物藏在最大的礼物盒里，点开就是只属于王芷怡和韩子越的一周年。
+          <p>Hello宝宝，</p>
+          <p>和你在一起的这一年，我最开心的不是某一天发生了多大的事，而是很多普通日子里，都有你。</p>
+          <p>我想继续陪你吃饭、散步、搞怪、吵吵闹闹，也想在你不开心的时候站在你这边。</p>
+          <p>以后不一定每天都完美，但我会一直认真喜欢你。</p>
+          <p>一周年快乐。</p>
+          <p style="text-align:right;">韩子越</p>
         </div>
       `;
       modal.classList.add("show");
+    }
+
+    function closeModal() {
+      modal.classList.remove("show");
     }
 
     function checkout() {
@@ -1029,7 +1015,7 @@
     document.querySelector("#checkoutBtn").addEventListener("click", checkout);
     document.querySelector("#starterBtn").addEventListener("click", chooseStarter);
     document.querySelector("#letterBtn").addEventListener("click", showLetter);
-    document.querySelector("#giftVideoBtn").addEventListener("click", showVideo);
+    document.querySelector("#giftLetterBtn").addEventListener("click", showGiftLetter);
     document.querySelector("#closeModal").addEventListener("click", closeModal);
     document.querySelector("#clearBtn").addEventListener("click", () => {
       cart.clear();
