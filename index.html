@@ -224,6 +224,7 @@
     .gift-scene {
       width: min(360px, 92%);
       aspect-ratio: 1;
+      border: 0;
       border-radius: 8px;
       background:
         radial-gradient(circle at 18% 18%, rgba(255,255,255,.8), transparent 12%),
@@ -233,6 +234,18 @@
       place-items: center;
       position: relative;
       box-shadow: 0 22px 52px rgba(103, 63, 82, .2);
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .gift-scene:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 28px 62px rgba(103, 63, 82, .26);
+    }
+
+    .gift-scene:focus-visible {
+      outline: 3px solid rgba(232, 91, 122, .45);
+      outline-offset: 4px;
     }
 
     .gift-box {
@@ -352,21 +365,28 @@
     }
 
     .product-art {
+      aspect-ratio: 397 / 214;
       min-height: 146px;
       display: grid;
       place-items: center;
-      color: #fff;
-      font-size: 62px;
-      font-weight: 900;
       position: relative;
       overflow: hidden;
+      background: #f4e7df;
     }
 
     .product-art::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(145deg, rgba(255,255,255,.24), transparent 42%, rgba(0,0,0,.1));
+      background: linear-gradient(180deg, rgba(255,255,255,.08), transparent 48%, rgba(51,39,36,.18));
+      pointer-events: none;
+    }
+
+    .product-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .product-body {
@@ -608,6 +628,20 @@
       font-weight: 700;
     }
 
+    .video-frame {
+      width: 100%;
+      border-radius: 8px;
+      background: #1f1718;
+      overflow: hidden;
+    }
+
+    .video-frame video {
+      width: 100%;
+      max-height: min(68vh, 720px);
+      display: block;
+      background: #1f1718;
+    }
+
     .footer {
       margin-top: 28px;
       color: var(--muted);
@@ -751,9 +785,9 @@
 
       <div class="hero-visual">
         <div class="floating-note note-a">6.30</div>
-        <div class="gift-scene">
+        <button class="gift-scene" id="giftVideoBtn" aria-label="打开一周年快乐视频">
           <div class="gift-box"><div class="ribbon"></div></div>
-        </div>
+        </button>
         <div class="floating-note note-b">一周年快乐</div>
       </div>
     </section>
@@ -799,15 +833,15 @@
 
   <script>
     const gifts = [
-      { id: 1, icon: "抱", name: "今日抱抱券", desc: "不问原因，先抱三十秒，再慢慢听你说。", note: "一个靠近", color: "#e85b7a" },
-      { id: 2, icon: "亲", name: "亲亲补给包", desc: "适合开心、委屈、撒娇和突然想被偏爱的时刻。", note: "一个眨眼", color: "#ff8aa3" },
-      { id: 3, icon: "做", name: "想和你做的爱", desc: "想和你做很多很多爱，想做就做，做个痛快。", note: "只对你有效", color: "#78b9a8" },
-      { id: 4, icon: "陪", name: "陪你散步套餐", desc: "路线你定，茉酸奶我买，话可以慢慢讲。", note: "牵手一次", color: "#8c74c9" },
-      { id: 5, icon: "偏", name: "终身偏爱会员", desc: "不用排队，不用预约，在韩子越这里永远优先。", note: "永久有效", color: "#f3b84b" },
-      { id: 6, icon: "夸", name: "专属夸夸机", desc: "王芷怡今天也很好看，很可爱，很值得被喜欢。", note: "笑一下", color: "#e66f4f" },
-      { id: 7, icon: "饭", name: "一起吃饭预约券", desc: "想吃什么都可以，重点不是吃什么，是和你一起。", note: "选个时间", color: "#d7864a" },
-      { id: 8, icon: "走", name: "随叫随走旅行券", desc: "你说想走，店主就开始查路线，目的地听你的。", note: "韩子越买单", color: "#5d8fc5" },
-      { id: 9, icon: "想", name: "自动想你提醒", desc: "不用设置闹钟，因为店主本来就会经常想你。", note: "每天生效", color: "#b46ad7" }
+      { id: 1, icon: "抱", image: "assets/抱.jpg", name: "抱抱券", desc: "下次见面，先来次拥抱，不问原因，先抱三十秒。", note: "一个靠近", color: "#e85b7a" },
+      { id: 2, icon: "亲", image: "assets/亲.jpg", name: "亲亲补给包", desc: "适合开心、委屈、撒娇和突然想被偏爱的时刻，无论线上与线下的一个吻。", note: "一个眨眼", color: "#ff8aa3" },
+      { id: 3, icon: "做", image: "assets/做.jpg", name: "想和你做的爱", desc: "想和你做很多很多爱，想做就做，做个痛快。", note: "只对你有效", color: "#78b9a8" },
+      { id: 4, icon: "陪", image: "assets/陪.jpg", name: "陪你散步套餐", desc: "路线你定，茉酸奶我买，话可以慢慢讲。", note: "牵手一次", color: "#8c74c9" },
+      { id: 5, icon: "偏", image: "assets/偏.jpg", name: "终身偏爱会员", desc: "不用排队，不用预约，在韩子越这里永远优先。", note: "永久有效", color: "#f3b84b" },
+      { id: 6, icon: "夸", image: "assets/夸.jpg", name: "专属夸夸机", desc: "王芷怡今天也很好看，很可爱，很值得被喜欢。", note: "笑一下", color: "#e66f4f" },
+      { id: 7, icon: "饭", image: "assets/饭.jpg", name: "一起吃饭预约券", desc: "想吃什么都可以，重点不是吃什么，是和你一起。", note: "选个时间", color: "#d7864a" },
+      { id: 8, icon: "怪", image: "assets/怪.jpg", name: "一起搞怪许可证", desc: "允许王芷怡和韩子越随时进入幼稚模式，一起发疯、一起傻笑、一起把普通日子过得很好玩。", note: "快乐优先", color: "#5d8fc5" },
+      { id: 9, icon: "想", image: "assets/想.jpg", name: "自动想你提醒", desc: "不用设置闹钟，因为店主本来就会经常想你。", note: "每天生效", color: "#b46ad7" }
     ];
 
     const cart = new Map();
@@ -822,7 +856,9 @@
     function renderGifts() {
       grid.innerHTML = gifts.map(gift => `
         <article class="card">
-          <div class="product-art" style="background: linear-gradient(135deg, ${gift.color}, #ffd7ab);">${gift.icon}</div>
+          <div class="product-art">
+            <img class="product-photo" src="${gift.image}" alt="${gift.name}">
+          </div>
           <div class="product-body">
             <h3>${gift.name}</h3>
             <p>${gift.desc}</p>
@@ -908,6 +944,25 @@
       modal.classList.add("show");
     }
 
+    function closeModal() {
+      const video = modalBody.querySelector("video");
+      if (video) video.pause();
+      modal.classList.remove("show");
+    }
+
+    function showVideo() {
+      modalTitle.textContent = "一周年快乐";
+      modalBody.innerHTML = `
+        <div class="video-frame">
+          <video controls autoplay playsinline preload="metadata" src="assets/anniversary.mp4"></video>
+        </div>
+        <div class="letter">
+          这份礼物藏在最大的礼物盒里，点开就是只属于王芷怡和韩子越的一周年。
+        </div>
+      `;
+      modal.classList.add("show");
+    }
+
     function checkout() {
       if (!getCartList().length) chooseStarter();
       const mood = document.querySelector("#mood").value.trim() || "开心一点";
@@ -949,11 +1004,11 @@
       `;
       modal.classList.add("show");
       document.querySelector("#moreGift").addEventListener("click", () => {
-        modal.classList.remove("show");
+        closeModal();
         drawer.classList.add("show");
       });
       document.querySelector("#closeTicket").addEventListener("click", () => {
-        modal.classList.remove("show");
+        closeModal();
       });
     }
 
@@ -974,7 +1029,8 @@
     document.querySelector("#checkoutBtn").addEventListener("click", checkout);
     document.querySelector("#starterBtn").addEventListener("click", chooseStarter);
     document.querySelector("#letterBtn").addEventListener("click", showLetter);
-    document.querySelector("#closeModal").addEventListener("click", () => modal.classList.remove("show"));
+    document.querySelector("#giftVideoBtn").addEventListener("click", showVideo);
+    document.querySelector("#closeModal").addEventListener("click", closeModal);
     document.querySelector("#clearBtn").addEventListener("click", () => {
       cart.clear();
       renderCart();
